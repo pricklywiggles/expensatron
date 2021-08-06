@@ -1,7 +1,8 @@
+import {ExpenseList} from 'components/expense-list';
 import * as React from 'react';
 
-const Home = () => {
-  return <div className="font-sans">Bitcoin Expense Calculator</div>;
+const Home = (): JSX.Element => {
+  return <ExpenseList />;
 };
 
 export default Home;
