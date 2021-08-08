@@ -12,25 +12,27 @@ const defaultPriceInfo = {
 };
 
 export type BitcoinPriceInfo = typeof defaultPriceInfo;
+export type PriceDispatch = React.Dispatch<
+  React.SetStateAction<BitcoinPriceInfo>
+>;
 
-const BitcoinPriceContext =
-  React.createContext<BitcoinPriceInfo>(defaultPriceInfo);
+const BitcoinPriceContext = React.createContext<
+  [BitcoinPriceInfo, PriceDispatch]
+>([defaultPriceInfo, () => null]);
 
 const BitcoinPriceProvider: Component = ({children}) => {
-  const [priceInfo, setPriceInfo] = React.useState(defaultPriceInfo);
+  const [priceInfo, setPriceInfo] =
+    React.useState<BitcoinPriceInfo>(defaultPriceInfo);
   const [settings] = useSettings();
   const isIntervalOn =
     settings.mode === CalculationModes.MARKET &&
     settings.refresh === RefreshModes.AUTO;
 
-  // Immediately get price whenever we go from manual to auto
+  // Immediately get price whenever we switch refresh modes
   React.useEffect(() => {
-    if (settings.refresh === RefreshModes.AUTO)
-      getBTCPriceNow()
-        .then((price) => {
-          setPriceInfo({amount: price, fetchedAt: dayjs()});
-        })
-        .catch((err) => console.log('Could not fetch btc price', err));
+    refreshBTCPrice(setPriceInfo).catch((err) =>
+      console.log('Could not fetch btc price when changing mode', err)
+    );
   }, [settings.refresh]);
 
   React.useEffect(() => {
@@ -41,21 +43,41 @@ const BitcoinPriceProvider: Component = ({children}) => {
   // Does not run when in manual mode or purchase mode.
   useInterval(
     () => {
-      getBTCPriceNow()
-        .then((price) => {
-          setPriceInfo({amount: price, fetchedAt: dayjs()});
-        })
-        .catch((err) => console.log('Failed to get BTC Price', err));
+      refreshBTCPrice(setPriceInfo).catch((err) => {
+        console.log('Failed to get BTC Price in interval', err);
+        // this will refresh the "last fetched at" message.
+        setPriceInfo((prev) => ({...prev}));
+      });
     },
     settings.pollIntervalSeconds * 1000,
     isIntervalOn
   );
 
+  const contextValue = React.useMemo<[BitcoinPriceInfo, PriceDispatch]>(
+    () => [priceInfo, setPriceInfo],
+    [priceInfo]
+  );
+
   return (
-    <BitcoinPriceContext.Provider value={priceInfo}>
+    <BitcoinPriceContext.Provider value={contextValue}>
       {children}
     </BitcoinPriceContext.Provider>
   );
+};
+
+export const refreshBTCPrice = (
+  setPriceInfo: PriceDispatch
+): Promise<BigNumber | void> =>
+  getBTCPriceNow().then((price) => {
+    setPriceInfo({amount: price, fetchedAt: dayjs()});
+  });
+
+const useBitcoinPriceDispatch = (): PriceDispatch => {
+  const context = React.useContext(BitcoinPriceContext);
+  if (context === null) {
+    throw new Error('used useBitcoinPrice outside provider');
+  }
+  return context[1];
 };
 
 const useBitcoinPrice = (): BitcoinPriceInfo => {
@@ -63,7 +85,7 @@ const useBitcoinPrice = (): BitcoinPriceInfo => {
   if (context === null) {
     throw new Error('used useBitcoinPrice outside provider');
   }
-  return context;
+  return context[0];
 };
 
-export {BitcoinPriceProvider, useBitcoinPrice};
+export {BitcoinPriceProvider, useBitcoinPrice, useBitcoinPriceDispatch};

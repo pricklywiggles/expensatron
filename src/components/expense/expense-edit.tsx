@@ -7,7 +7,12 @@ import {
 } from '../expenses-context';
 import {useForm} from 'controlled-form-hook';
 import {Validators} from 'tiny-validation';
-import {isNotFutureDate, isValidBigNumber, isValidDate} from 'lib/validators';
+import {
+  isNotFutureDate,
+  isValidBigNumber,
+  isValidDate,
+  isValidDollarAmount
+} from 'lib/validators';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 import {ValidationErrors} from 'components/validation-errors';
@@ -35,18 +40,29 @@ const ExpenseEdit = ({
   toggle
 }: ExpenseEditProps): JSX.Element => {
   const dispatch = useExpenseDispatch();
+  const [submitError, setSubmitError] = React.useState<string>(null);
   const onSubmit = async (formValues: FormValues) => {
     const values = {
       ...formValues,
       date: dayjs(formValues.date),
       usdPrice: new BigNumber(formValues.usdPrice)
     };
+    console.log('ONSUBMIT', values);
     if (isNew) {
-      addExpense(dispatch, values);
+      addExpense(dispatch, values)
+        .then(() => toggle())
+        .catch(() => {
+          setSubmitError('Network error, please wait and try again');
+          console.error('Error when submitting add form');
+        });
     } else {
-      editExpense(dispatch, {id, ...values});
+      editExpense(dispatch, {id, ...values})
+        .then(() => toggle())
+        .catch(() => {
+          setSubmitError('Network error, please wait and try again');
+          console.error('Error when submitting edit form');
+        });
     }
-    toggle();
   };
   const {
     handleSubmit,
@@ -65,7 +81,11 @@ const ExpenseEdit = ({
         maxChars(30, '30 Character maximum')
       ],
       date: [isPresent('Enter a date'), isValidDate, isNotFutureDate],
-      usdPrice: [isPresent('Enter amount in USD'), isValidBigNumber],
+      usdPrice: [
+        isPresent('Enter amount in USD'),
+        isValidBigNumber,
+        isValidDollarAmount
+      ],
       memo: [maxChars(50, '50 character maximum')]
     },
     initialValues: {
@@ -212,6 +232,7 @@ const ExpenseEdit = ({
                   </div>
                 </div>
               </div>
+              <div className="text-red-400 w-full">{submitError}</div>
               <div className="flex justify-end mt-6">
                 <button
                   type="button"

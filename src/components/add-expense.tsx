@@ -11,7 +11,7 @@ const AddExpense = (): JSX.Element => {
   if (isEditing) {
     return (
       <ExpenseEdit
-        className="min-w-lg max-w-xl mx-auto px-5 sm:px-0 space-y-6 rounded-lg shadow-lg overflow-hidden"
+        className="min-w-lg max-w-xl mx-auto sm:px-0 space-y-6 rounded-lg shadow-lg overflow-hidden"
         id="0"
         merchant=""
         date={dayjs()}

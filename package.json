@@ -1,5 +1,5 @@
 {
-  "name": "expense-calculator",
+  "name": "expensatron",
   "version": "0.0.1",
   "scripts": {
     "dev": "next",

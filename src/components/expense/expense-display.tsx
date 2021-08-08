@@ -36,13 +36,13 @@ const ExpenseDisplay = ({
       <div className="px-6 pt-4 pb-2 flex items-center">
         <div className="min-w-0 flex-1 sm:flexsm:items-center sm:justify-between">
           <div className="truncate">
-            <div className="flex text-md">
+            <div className="flex text-sm sm:text-md">
               <p className="font-medium text-indigo-500 truncate">{merchant}</p>
             </div>
             <div className="mt-2 flex">
-              <div className="flex items-center text-sm text-gray-500">
+              <div className="flex items-center text-xs sm:text-sm text-gray-500">
                 <CalendarIcon
-                  className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                  className="flex-shrink-0 mr-1.5 h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
                   aria-hidden="true"
                 />
                 <p>
@@ -54,7 +54,7 @@ const ExpenseDisplay = ({
             </div>
             {memo ? (
               <div className="mt-2 flex">
-                <div className="flex items-center text-sm text-gray-300">
+                <div className="flex items-center text-xs sm:text-sm text-gray-300">
                   <p className="italic text-gray-400 truncate pr-1">{memo}</p>
                 </div>
               </div>
@@ -65,7 +65,7 @@ const ExpenseDisplay = ({
           </div>
         </div>
         <PriceBadge
-          className="transform scale-75 pr-6 sm:pr-20 sm:-mt-4"
+          className="transform scale-75 md:scale-100 pr-6 sm:pr-10 sm:-mt-4"
           color="bg-green-100"
           usdPrice={usdPrice}
           btcPrice={displayBtcPrice}
@@ -73,7 +73,7 @@ const ExpenseDisplay = ({
         <div className="">
           <OptionsPopover
             onDelete={() => deleteExpense(dispatch, id)}
-            onEdit={() => toggle()}
+            onEdit={toggle}
           />
         </div>
       </div>

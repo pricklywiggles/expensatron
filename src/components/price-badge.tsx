@@ -24,7 +24,7 @@ const PriceBadge = ({
           )}
         >
           <span className="transform scale-150 text-gray-400 pr-1">$</span>
-          {usdPrice.toString()}
+          {usdPrice.toFormat()}
         </div>
         <div
           className={classNames(
@@ -35,7 +35,7 @@ const PriceBadge = ({
           <span className="transform scale-150 text-gray-400 pr-1">
             &#x20bf;
           </span>
-          {btcPrice.toString()}
+          {btcPrice.toFormat()}
         </div>
       </div>
       {/* <div className="">
