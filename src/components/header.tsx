@@ -7,7 +7,7 @@ const Header = (): JSX.Element => {
 
   return (
     <>
-      <header className="max-w-5xl mx-auto my-6 flex justify-between px-4 sm:px-6 ">
+      <header className="max-w-4xl mx-auto my-6 flex justify-between px-4 sm:px-6 ">
         <div className="font-thin font-bold text-xl sm:text-3xl text-gray-900">
           Bitcoin Expense Calculator
         </div>
