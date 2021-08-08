@@ -5,6 +5,10 @@
 
 A simple proof of concept for an expense calculator as described (here)[https://gist.github.com/Dania02525/4e3e9516fb595008ac4ebd9d35db342e]
 
+## What does it look like
+
+You can see if for yourself at https://expensatron.gustavo.is
+
 ## How do I run this?
 
 locally: 
@@ -79,3 +83,7 @@ __Design consideration__: This allows us to calculate all the prices for all the
 2. CI/CD
 3. Error reporting via Sentry or similar API
 4. Make this fully accessible by adding full screen reader support. (add accessibilty checks via CI/CD)
+
+## Screenshots
+
+![alt text](https://user-images.githubusercontent.com/51838513/128644879-6754f2ef-6c68-45d0-9d72-eace5e0e5086.png)
