@@ -6,6 +6,7 @@ import {Header} from 'components/header';
 import {SettingsProvider} from 'components/settings-context';
 import {ExpenseProvider} from 'components/expenses-context';
 import {BitcoinPriceProvider} from 'components/bitcoin-price-manager';
+import {WavyDivider} from 'components/svg-patterns';
 
 const MyApp = ({Component, pageProps}: AppProps): JSX.Element => {
   return (
@@ -13,7 +14,24 @@ const MyApp = ({Component, pageProps}: AppProps): JSX.Element => {
       <Head>
         <title>Expensatron</title>
         <meta name="description" content="Bitcoin Expense Calculator"></meta>
-        {/* TODO: add favicons */}
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest"></link>
         <meta name="theme-color" content="#ffffff"></meta>
         <meta
           name="viewport"
@@ -23,7 +41,8 @@ const MyApp = ({Component, pageProps}: AppProps): JSX.Element => {
       <SettingsProvider>
         <BitcoinPriceProvider>
           <ExpenseProvider>
-            <div className="w-full ">
+            <div className="w-full">
+              <WavyDivider />
               <Header />
               <Component {...pageProps} />
             </div>
