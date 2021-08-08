@@ -1,9 +1,13 @@
-# expensatron
+# Bitcoin expenses calculator
 
 
 ## What is this? 
 
-A simple proof of concept for an expense calculator as described (here)[https://gist.github.com/Dania02525/4e3e9516fb595008ac4ebd9d35db342e]
+A simple proof of concept for an expense calculator as described [here](https://gist.github.com/Dania02525/4e3e9516fb595008ac4ebd9d35db342e)
+
+## What does it look like
+
+You can see if for yourself at https://expensatron.gustavo.is
 
 ## How do I run this?
 
@@ -15,7 +19,7 @@ deploy the site from command line:
      1. install vercel cli `npm i -g vercel`
      2. deploy to production: `vercel --prod`
      3. deploy a stage: `vercel`
-  2. Or simply commit to main (production) or a branch (staging)
+  2. Or simply commit to main (production) or a branch (staging) to deploy automatically
 
 This solution is mobile-ready and fully keyboard accessible ❤️
 
@@ -53,10 +57,11 @@ __Design consideration__: This allows us to calculate all the prices for all the
 ## General discussion topics
 
 1. Handling of amounts and risk of loss when converting currencies.
-2. How we calculate the price of 1 bitcoin.
-3. Robustness concerns due to server conditions and mitigating strategies. Currently if a server goes down, we use the last known price of bitcoin, but the second scenario is broken if we can't pull the historic price of bitcoin.
-4. This proof of concept's persistent storage is simulated by saving data (unencrypted) in localstorage. For production we'd need to think through encryption options for local and server data, and keep as little as possible (if any) in localstorage
-5. Scaling: ideally I'd like to add analytics to measure how many api calls we are making, this would help us realize any future scalability issues as we have multiple clients polling for bitcoin prices. 
+2. Considerations taken when inputing an expense: check for valid dollar amount (including enforcing 2 digit precision), cap maximum characters for merchant and memo and verify that the date is valid and that it is not a date in the future.
+3. How we calculate the price of 1 bitcoin.
+4. Robustness concerns due to server conditions and mitigating strategies. Currently if a server goes down, we use the last known price of bitcoin, but the second scenario is broken if we can't pull the historic price of bitcoin.
+5. This proof of concept's persistent storage is simulated by saving data (unencrypted) in localstorage. For production we'd need to think through encryption options for local and server data, and keep as little as possible (if any) in localstorage
+6. Scaling: ideally I'd like to add analytics to measure how many api calls we are making, this would help us realize any future scalability issues as we have multiple clients polling for bitcoin prices. 
 
 ## Possible improvements
 
@@ -75,7 +80,11 @@ __Design consideration__: This allows us to calculate all the prices for all the
 
 ## Goals as this moves closer to production
 
-1. Unit, integration and e2e tests. Following this principle)[https://kentcdodds.com/blog/write-tests]
+1. Unit, integration and e2e tests. Following [the Guillermo Rauch testing principle](https://kentcdodds.com/blog/write-tests)
 2. CI/CD
 3. Error reporting via Sentry or similar API
 4. Make this fully accessible by adding full screen reader support. (add accessibilty checks via CI/CD)
+
+## Screenshots
+
+![alt text](https://user-images.githubusercontent.com/51838513/128644879-6754f2ef-6c68-45d0-9d72-eace5e0e5086.png)
