@@ -66,7 +66,7 @@ const ExpenseList = (): JSX.Element => {
         <div className="flex justify-center">
           <div className="relative">
             <PriceBadge
-              className="transform scale-150"
+              className="transform scale-125 sm:scale-150"
               color="bg-green-100"
               usdPrice={usdPrice}
               btcPrice={btcPrice}
@@ -75,7 +75,7 @@ const ExpenseList = (): JSX.Element => {
         </div>
         <div className="">
           <div className="flex space-x-3 justify-center items-baseline">
-            <div className="text-gray-500 text-xs sm:text-sm italic pt-6 sm:pt-4 pb-4 sm:pb-10">
+            <div className="relative text-gray-500 text-xs sm:text-sm italic top-1 pt-6 sm:pt-4 pb-4 sm:pb-10">
               {getUpdateMessage(settings, currentBTCPrice.fetchedAt)}
             </div>
             {showRefresh ? (

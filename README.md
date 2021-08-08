@@ -44,7 +44,7 @@ When a user adds an expense, we look at the date of the expense and pull the clo
 
 We calculate the btc total and save it as part of the expense. __this happens every time you add or edit an expense even when your settings use current market price__
 
-### Scenario 1. Current market price.
+### Scenario 2. Current market price.
 
 For this, we use the provided blockchain.info api endpoint. We poll for the current price of **one bitcoin** at the interval requested by the user and save it as a context value available at any time. __this polling stops whenever the user's settings are set to time of purchase__
 
