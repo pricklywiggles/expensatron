@@ -19,7 +19,7 @@ deploy the site from command line:
      1. install vercel cli `npm i -g vercel`
      2. deploy to production: `vercel --prod`
      3. deploy a stage: `vercel`
-  2. Or simply commit to main (production) or a branch (staging)
+  2. Or simply commit to main (production) or a branch (staging) to deploy automatically
 
 This solution is mobile-ready and fully keyboard accessible ❤️
 
