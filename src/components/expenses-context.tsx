@@ -36,8 +36,6 @@ const ExpenseProvider = ({children}: WithChildren): JSX.Element => {
     deserializeExpenses
   );
 
-  console.log(expenses);
-
   return (
     <ExpenseContext.Provider value={expenses}>
       <ExpenseDispatchContext.Provider value={setExpenses}>
@@ -75,7 +73,6 @@ const addExpense = async (
     btcPrice = convertUSDToBTC(usdPrice, await getBTCPriceAtDate(date));
   }
   const newExpense: Expense = {id, merchant, usdPrice, btcPrice, date, memo};
-  console.log({newExpense});
   dispatch((prev) => [...prev, newExpense]);
 };
 

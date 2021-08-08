@@ -13,7 +13,6 @@ export const getBTCFromUSDAtMarket = async (
   usdAmount: BigNumber
 ): Promise<BigNumber> => {
   const endpoint = `https://blockchain.info/tobtc?currency=USD&value=${usdAmount.toString()}`;
-  console.log(endpoint);
   return fetch(endpoint)
     .then((data) => data.json())
     .then((res) => new BigNumber(res));
@@ -41,7 +40,6 @@ export const getBTCPriceAtDate = async (
 ): Promise<BigNumber> => {
   const formattedDate = date.format('YYYY-MM-DD');
   const endpoint = `https://api.coindesk.com/v1/bpi/historical/close.json?start=${formattedDate}&end=${formattedDate}`;
-  console.log(endpoint);
   return fetch(endpoint)
     .then((data) => data.json())
     .then((res) => new BigNumber(res.bpi[formattedDate]))

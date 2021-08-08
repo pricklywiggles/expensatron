@@ -31,7 +31,7 @@ const BitcoinPriceProvider: Component = ({children}) => {
   // Immediately get price whenever we switch refresh modes
   React.useEffect(() => {
     refreshBTCPrice(setPriceInfo).catch((err) =>
-      console.log('Could not fetch btc price when changing mode', err)
+      console.error('Could not fetch btc price when changing mode', err)
     );
   }, [settings.refresh]);
 
@@ -44,7 +44,7 @@ const BitcoinPriceProvider: Component = ({children}) => {
   useInterval(
     () => {
       refreshBTCPrice(setPriceInfo).catch((err) => {
-        console.log('Failed to get BTC Price in interval', err);
+        console.error('Failed to get BTC Price in interval', err);
         // this will refresh the "last fetched at" message.
         setPriceInfo((prev) => ({...prev}));
       });

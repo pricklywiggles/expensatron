@@ -9,6 +9,7 @@ import {useForm} from 'controlled-form-hook';
 import {Validators} from 'tiny-validation';
 import {
   isNotFutureDate,
+  isPositiveAmount,
   isValidBigNumber,
   isValidDate,
   isValidDollarAmount
@@ -47,7 +48,6 @@ const ExpenseEdit = ({
       date: dayjs(formValues.date),
       usdPrice: new BigNumber(formValues.usdPrice)
     };
-    console.log('ONSUBMIT', values);
     if (isNew) {
       addExpense(dispatch, values)
         .then(() => toggle())
@@ -84,7 +84,8 @@ const ExpenseEdit = ({
       usdPrice: [
         isPresent('Enter amount in USD'),
         isValidBigNumber,
-        isValidDollarAmount
+        isValidDollarAmount,
+        isPositiveAmount
       ],
       memo: [maxChars(50, '50 character maximum')]
     },
@@ -94,17 +95,6 @@ const ExpenseEdit = ({
       usdPrice: usdPrice?.toString(),
       memo
     }
-  });
-
-  console.log({
-    handleSubmit,
-    handleFieldChange,
-    isSubmitting,
-    isDisabled,
-    values,
-    visited,
-    errors,
-    reset
   });
 
   const onCancel = () => {

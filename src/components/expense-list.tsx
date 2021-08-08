@@ -25,7 +25,6 @@ const getUpdateMessage = (
   settings: Settings,
   lastFetched: dayjs.Dayjs
 ): string => {
-  console.log('yo');
   switch (settings.mode) {
     case CalculationModes.PURCHASE:
       return 'Bitcoin prices historically calculated from receipt dates';

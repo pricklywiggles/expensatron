@@ -23,6 +23,13 @@ export const isValidDollarAmount = Validation((key, x) => {
   return v.dp() > 2 ? Fail({[key]: [`Max of 2 decimal places`]}) : Success();
 });
 
+export const isPositiveAmount = Validation((key, x) => {
+  let v = new BigNumber(x);
+  return v.isGreaterThan(0)
+    ? Success()
+    : Fail({[key]: ['Enter a positive amount']});
+});
+
 // export const isValidBigNumber = Validation((key, x) => {
 //   let y = BigNumber(x);
 //   return BigNumber.isBigNumber(y) && !y.isNaN()
