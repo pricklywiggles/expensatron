@@ -1,4 +1,4 @@
-# expensatron
+# Bitcoin expenses calculator
 
 
 ## What is this? 
