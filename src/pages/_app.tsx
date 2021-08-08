@@ -4,6 +4,8 @@ import '../styles/globals.css';
 import Head from 'next/head';
 import {Header} from 'components/header';
 import {SettingsProvider} from 'components/settings-context';
+import {ExpenseProvider} from 'components/expenses-context';
+import {BitcoinPriceProvider} from 'components/bitcoin-price-manager';
 
 const MyApp = ({Component, pageProps}: AppProps): JSX.Element => {
   return (
@@ -19,10 +21,14 @@ const MyApp = ({Component, pageProps}: AppProps): JSX.Element => {
         ></meta>
       </Head>
       <SettingsProvider>
-        <div className="w-full">
-          <Header />
-          <Component {...pageProps} />
-        </div>
+        <BitcoinPriceProvider>
+          <ExpenseProvider>
+            <div className="w-full ">
+              <Header />
+              <Component {...pageProps} />
+            </div>
+          </ExpenseProvider>
+        </BitcoinPriceProvider>
       </SettingsProvider>
     </>
   );

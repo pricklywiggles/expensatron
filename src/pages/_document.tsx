@@ -27,6 +27,13 @@ class MyDocument extends Document {
             type="font/ttf"
             crossOrigin="anonymous"
           />
+          <link
+            rel="prefetch"
+            href="/fonts/Cassannet/cassannet_plus_thin-webfont.ttf"
+            as="font"
+            type="font/ttf"
+            crossOrigin="anonymous"
+          />
         </Head>
         <body className="font-sans">
           <Main />

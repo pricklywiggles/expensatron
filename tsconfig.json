@@ -16,8 +16,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noImplicitAny": true,
     "baseUrl": "./src"
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules, **/*.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

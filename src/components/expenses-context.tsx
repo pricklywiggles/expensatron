@@ -1,22 +1,42 @@
 import {BigNumber} from 'bignumber.js';
-import {fetchBTCPrice} from 'lib/util';
+import {
+  convertUSDToBTC,
+  getBTCFromUSDAtMarket,
+  getBTCPriceAtDate
+} from 'lib/util';
 import * as React from 'react';
+import {WithChildren} from 'types/common';
 import {v4 as uuidv4} from 'uuid';
+import dayjs from 'dayjs';
+import {
+  deserializeExpenses,
+  useLocalStorageState
+} from 'hooks/use-local-storage';
 
-export type Expense = {
-  id: string;
-  merchant: string;
-  date: Date;
-  usdPrice: BigNumber;
-  btcPrice: BigNumber;
+export const emptyExpense = {
+  id: '',
+  merchant: '',
+  date: dayjs(),
+  memo: '',
+  usdPrice: new BigNumber(0),
+  btcPrice: new BigNumber(0)
 };
+
+export type Expense = typeof emptyExpense;
+
 type ExpenseDispatch = React.Dispatch<React.SetStateAction<Expense[]>>;
 
 const ExpenseContext = React.createContext<Expense[]>([]);
 const ExpenseDispatchContext = React.createContext(null);
 
 const ExpenseProvider = ({children}: WithChildren): JSX.Element => {
-  const [expenses, setExpenses] = React.useState<Expense[]>([]);
+  const [expenses, setExpenses] = useLocalStorageState<Expense[]>(
+    'expenses',
+    () => [],
+    deserializeExpenses
+  );
+
+  console.log(expenses);
 
   return (
     <ExpenseContext.Provider value={expenses}>
@@ -34,7 +54,7 @@ const useExpenses = (): [Expense[], ExpenseDispatch] => [
 
 const useExpenseDispatch = (): ExpenseDispatch => {
   const dispatch = React.useContext(ExpenseDispatchContext);
-  if (typeof dispatch === 'undefined') {
+  if (dispatch === null) {
     throw new Error('useSettings called from outside SettingsContext');
   }
   return dispatch;
@@ -42,11 +62,20 @@ const useExpenseDispatch = (): ExpenseDispatch => {
 
 const addExpense = async (
   dispatch: ExpenseDispatch,
-  {merchant, usdPrice, date}: Omit<Expense, 'id' | 'btcPrice'>
+  {merchant, usdPrice, date, memo}: Omit<Expense, 'id' | 'btcPrice'>
 ): Promise<void> => {
   const id = uuidv4();
-  const btcPrice: BigNumber = await fetchBTCPrice(usdPrice);
-  const newExpense: Expense = {id, merchant, usdPrice, btcPrice, date};
+  let btcPrice: BigNumber;
+
+  // If the receipt's date is today, we need to use the current price of bitcoin, the historical price API
+  // does not include today's price.
+  if (dayjs().diff(date, 'day') === 0) {
+    btcPrice = await getBTCFromUSDAtMarket(usdPrice);
+  } else {
+    btcPrice = convertUSDToBTC(usdPrice, await getBTCPriceAtDate(date));
+  }
+  const newExpense: Expense = {id, merchant, usdPrice, btcPrice, date, memo};
+  console.log({newExpense});
   dispatch((prev) => [...prev, newExpense]);
 };
 
@@ -59,10 +88,17 @@ const deleteExpense = async (
 
 const editExpense = async (
   dispatch: ExpenseDispatch,
-  {id, merchant, usdPrice, date}: Omit<Expense, 'btcPrice'>
+  {id, merchant, usdPrice, date, memo}: Omit<Expense, 'btcPrice'>
 ): Promise<void> => {
-  const btcPrice: BigNumber = await fetchBTCPrice(usdPrice);
-  const updatedExpense: Expense = {id, merchant, usdPrice, btcPrice, date};
+  const btcPrice = convertUSDToBTC(usdPrice, await getBTCPriceAtDate(date));
+  const updatedExpense: Expense = {
+    id,
+    merchant,
+    usdPrice,
+    btcPrice,
+    date,
+    memo
+  };
   dispatch((prev) =>
     prev.map((expense) => (expense.id === id ? updatedExpense : expense))
   );
