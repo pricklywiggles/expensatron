@@ -67,7 +67,6 @@ const ExpenseEdit = ({
   const {
     handleSubmit,
     handleFieldChange,
-    isSubmitting,
     isDisabled,
     values,
     visited,
