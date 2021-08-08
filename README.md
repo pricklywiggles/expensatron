@@ -79,7 +79,7 @@ __Design consideration__: This allows us to calculate all the prices for all the
 
 ## Goals as this moves closer to production
 
-1. Unit, integration and e2e tests. Following this principle)[https://kentcdodds.com/blog/write-tests]
+1. Unit, integration and e2e tests. Following [the Guillermo Rauch testing principle](https://kentcdodds.com/blog/write-tests)
 2. CI/CD
 3. Error reporting via Sentry or similar API
 4. Make this fully accessible by adding full screen reader support. (add accessibilty checks via CI/CD)
