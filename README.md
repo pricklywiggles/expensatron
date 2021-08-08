@@ -57,10 +57,11 @@ __Design consideration__: This allows us to calculate all the prices for all the
 ## General discussion topics
 
 1. Handling of amounts and risk of loss when converting currencies.
-2. How we calculate the price of 1 bitcoin.
-3. Robustness concerns due to server conditions and mitigating strategies. Currently if a server goes down, we use the last known price of bitcoin, but the second scenario is broken if we can't pull the historic price of bitcoin.
-4. This proof of concept's persistent storage is simulated by saving data (unencrypted) in localstorage. For production we'd need to think through encryption options for local and server data, and keep as little as possible (if any) in localstorage
-5. Scaling: ideally I'd like to add analytics to measure how many api calls we are making, this would help us realize any future scalability issues as we have multiple clients polling for bitcoin prices. 
+2. Considerations taken when inputing an expense: check for valid dollar amount (including enforcing 2 digit precision), cap maximum characters for merchant and memo and verify that the date is valid and that it is not a date in the future.
+3. How we calculate the price of 1 bitcoin.
+4. Robustness concerns due to server conditions and mitigating strategies. Currently if a server goes down, we use the last known price of bitcoin, but the second scenario is broken if we can't pull the historic price of bitcoin.
+5. This proof of concept's persistent storage is simulated by saving data (unencrypted) in localstorage. For production we'd need to think through encryption options for local and server data, and keep as little as possible (if any) in localstorage
+6. Scaling: ideally I'd like to add analytics to measure how many api calls we are making, this would help us realize any future scalability issues as we have multiple clients polling for bitcoin prices. 
 
 ## Possible improvements
 
