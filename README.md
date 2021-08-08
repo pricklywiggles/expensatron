@@ -3,7 +3,7 @@
 
 ## What is this? 
 
-A simple proof of concept for an expense calculator as described (here)[https://gist.github.com/Dania02525/4e3e9516fb595008ac4ebd9d35db342e]
+A simple proof of concept for an expense calculator as described [here](https://gist.github.com/Dania02525/4e3e9516fb595008ac4ebd9d35db342e)
 
 ## What does it look like
 
