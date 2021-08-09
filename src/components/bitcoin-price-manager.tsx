@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 import {useInterval} from 'hooks/use-interval';
-import {getBTCPriceNow} from 'lib/util';
+import api from 'lib/api';
 import * as React from 'react';
 import {Component} from 'types/common';
 import {CalculationModes, RefreshModes, useSettings} from './settings-context';
@@ -68,14 +68,17 @@ const BitcoinPriceProvider: Component = ({children}) => {
 export const refreshBTCPrice = (
   setPriceInfo: PriceDispatch
 ): Promise<BigNumber | void> =>
-  getBTCPriceNow().then((price) => {
-    setPriceInfo({amount: price, fetchedAt: dayjs()});
-  });
+  api
+    .getBTCPrice()
+    .then((price) => {
+      setPriceInfo({amount: price, fetchedAt: dayjs()});
+    })
+    .catch((err) => console.error('Failed to refresh btc price from api', err));
 
 const useBitcoinPriceDispatch = (): PriceDispatch => {
   const context = React.useContext(BitcoinPriceContext);
   if (context === null) {
-    throw new Error('used useBitcoinPrice outside provider');
+    throw new Error('used useBitcoinPriceDispatch outside provider');
   }
   return context[1];
 };

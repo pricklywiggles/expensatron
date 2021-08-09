@@ -1,9 +1,4 @@
 import {BigNumber} from 'bignumber.js';
-import {
-  convertUSDToBTC,
-  getBTCFromUSDAtMarket,
-  getBTCPriceAtDate
-} from 'lib/util';
 import * as React from 'react';
 import {WithChildren} from 'types/common';
 import {v4 as uuidv4} from 'uuid';
@@ -12,6 +7,7 @@ import {
   deserializeExpenses,
   useLocalStorageState
 } from 'hooks/use-local-storage';
+import api from 'lib/api';
 
 export const emptyExpense = {
   id: '',
@@ -63,7 +59,7 @@ const addExpense = async (
   {merchant, usdPrice, date, memo}: Omit<Expense, 'id' | 'btcPrice'>
 ): Promise<void> => {
   const id = uuidv4();
-  const btcPrice = await getBTCPrice(date, usdPrice);
+  const btcPrice = await api.convertUSDToBTC(date, usdPrice);
   const newExpense: Expense = {id, merchant, usdPrice, btcPrice, date, memo};
   dispatch((prev) => [...prev, newExpense]);
 };
@@ -79,7 +75,7 @@ const editExpense = async (
   dispatch: ExpenseDispatch,
   {id, merchant, usdPrice, date, memo}: Omit<Expense, 'btcPrice'>
 ): Promise<void> => {
-  const btcPrice = await getBTCPrice(date, usdPrice);
+  const btcPrice = await api.convertUSDToBTC(date, usdPrice);
   const updatedExpense: Expense = {
     id,
     merchant,
@@ -91,22 +87,6 @@ const editExpense = async (
   dispatch((prev) =>
     prev.map((expense) => (expense.id === id ? updatedExpense : expense))
   );
-};
-
-const getBTCPrice = async (
-  date: dayjs.Dayjs,
-  usdPrice: BigNumber
-): Promise<BigNumber> => {
-  let btcPrice: BigNumber;
-
-  // If the receipt's date is today, we need to use the current price of bitcoin, the historical price API
-  // does not include today's price.
-  if (dayjs().diff(date, 'day') === 0) {
-    btcPrice = await getBTCFromUSDAtMarket(usdPrice);
-  } else {
-    btcPrice = convertUSDToBTC(usdPrice, await getBTCPriceAtDate(date));
-  }
-  return btcPrice;
 };
 
 export {
