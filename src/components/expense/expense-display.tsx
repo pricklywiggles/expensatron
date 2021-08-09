@@ -9,7 +9,7 @@ import {
 import {PriceBadge} from 'components/price-badge';
 import {CalculationModes, useSettings} from 'components/settings-context';
 import {useBitcoinPrice} from 'components/bitcoin-price-manager';
-import {convertUSDToBTC} from 'lib/util';
+import {convertCurrency} from 'lib/util';
 
 type ExpenseDisplayProps = TExpense & {toggle: () => void};
 
@@ -28,7 +28,7 @@ const ExpenseDisplay = ({
 
   const displayBtcPrice =
     settings.mode === CalculationModes.MARKET
-      ? convertUSDToBTC(usdPrice, oneBitcoin)
+      ? convertCurrency(usdPrice, oneBitcoin)
       : btcPrice;
 
   return (
