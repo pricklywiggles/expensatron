@@ -23,6 +23,13 @@ const Settings: Component = () => {
     settings.refresh === RefreshModes.AUTO
   );
 
+  const onCancel = () => {
+    setSelected(settings.mode);
+    setEnabled(settings.refresh === RefreshModes.AUTO);
+    setPollInterval(settings.pollIntervalSeconds);
+    toggle();
+  };
+
   const onSave = () => {
     const settings = {
       mode: selected,
@@ -42,7 +49,7 @@ const Settings: Component = () => {
         static
         className="fixed z-10 inset-0 overflow-y-auto"
         open={isOpen}
-        onClose={toggle}
+        onClose={onCancel}
       >
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
@@ -138,7 +145,7 @@ const Settings: Component = () => {
                     {({open}) => (
                       <>
                         <Listbox.Label className="sr-only">
-                          Change published status
+                          Change polling interval
                         </Listbox.Label>
                         <div
                           className={classNames(
@@ -176,7 +183,7 @@ const Settings: Component = () => {
                               </div>
                               <Listbox.Button className="relative inline-flex items-center disabled:bg-gray-400 bg-indigo-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">
                                 <span className="sr-only">
-                                  Change published status
+                                  Change polling interval
                                 </span>
                                 <ChevronDownIcon
                                   className="h-5 w-5 text-white"

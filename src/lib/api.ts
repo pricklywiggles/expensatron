@@ -29,9 +29,12 @@ const getHistoricalBTCPrice = async (
 ): Promise<BigNumber> => {
   const formattedDate = date.format('YYYY-MM-DD');
   const endpoint = `https://api.coindesk.com/v1/bpi/historical/close.json?start=${formattedDate}&end=${formattedDate}`;
-  return restClient<CoinDeskData>(endpoint).then(
-    ({bpi}) => new BigNumber(bpi[formattedDate])
-  );
+  return restClient<CoinDeskData>(endpoint).then(({bpi}) => {
+    if (bpi === undefined) {
+      console.log('Could not get bitcoin price on', formattedDate);
+    }
+    return new BigNumber(bpi?.[formattedDate] ?? 0);
+  });
 };
 
 // Gets the price of bitcoin at a given date.

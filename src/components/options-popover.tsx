@@ -25,7 +25,7 @@ const OptionsPopover = ({
                   'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                 )}
               >
-                <h2 className="sr-only">Solutions</h2>
+                <h2 className="sr-only">Expense Options</h2>
                 {/* <DotsIcon className="h-7 w-7 text-indigo-400" aria-hidden="true" /> */}
                 <DotsIcon
                   className={classNames(

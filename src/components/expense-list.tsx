@@ -18,6 +18,8 @@ import {addExpenseListPrices} from 'lib/util';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
 import {RefreshIcon} from './icons';
+import {SearchIcon} from '@heroicons/react/outline';
+import {useDebouncedState} from 'hooks/use-debounced-state';
 
 dayjs.extend(relativeTime);
 
@@ -37,18 +39,38 @@ const getUpdateMessage = (
   }
 };
 
+const filterExpenses = (
+  expenses: TExpense[],
+  searchStr: string,
+  setFilteredExpenses: React.Dispatch<React.SetStateAction<TExpense[]>>
+): void => {
+  setFilteredExpenses(
+    expenses.filter(
+      ({merchant, memo}) =>
+        merchant.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
+        memo.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1
+    )
+  );
+};
+
 const ExpenseList = (): JSX.Element => {
   const [mounted, setMounted] = React.useState(false);
+  const [expenses] = useExpenses();
+  const [debouncedSearchStr, setSearchStr] = useDebouncedState('', 200);
+  const [filteredExpenses, setFilteredExpenses] = React.useState(expenses);
   const currentBTCPrice = useBitcoinPrice();
   const priceDispatch = useBitcoinPriceDispatch();
-  const [expenses] = useExpenses();
   const [settings] = useSettings();
 
   // avoid rendering on server to avoid content warning
   React.useEffect(() => setMounted(true), []);
 
+  React.useEffect(() => {
+    filterExpenses(expenses, debouncedSearchStr, setFilteredExpenses);
+  }, [expenses, debouncedSearchStr]);
+
   const {usdPrice, btcPrice} = addExpenseListPrices(
-    expenses,
+    filteredExpenses,
     settings.mode,
     currentBTCPrice.amount
   );
@@ -74,7 +96,7 @@ const ExpenseList = (): JSX.Element => {
         </div>
         <div className="">
           <div className="flex space-x-3 justify-center items-baseline">
-            <div className="relative text-gray-500 text-xs sm:text-sm italic top-1 pt-6 sm:pt-4 pb-4 sm:pb-10">
+            <div className="relative text-gray-500 text-xs sm:text-sm italic top-1 pt-6 sm:pt-4 pb-3 sm:pb-6">
               {getUpdateMessage(settings, currentBTCPrice.fetchedAt)}
             </div>
             {showRefresh ? (
@@ -88,10 +110,32 @@ const ExpenseList = (): JSX.Element => {
           </div>
         </div>
       </div>
-
-      <div className="max-w-3xl mx-auto overflow-hidden shadow rounded-lg">
+      <div>
+        <label htmlFor="filter" className="sr-only">
+          Quick filter expenses
+        </label>
+        <div className="mt-1 relative flex items-center max-w-3xl mx-auto">
+          <input
+            type="text"
+            name="filter"
+            id="filter"
+            placeholder="Filter expenses..."
+            onChange={({target}) =>
+              // dbFilterExpenses(expenses, target.value, setFilteredExpenses);
+              setSearchStr(target.value)
+            }
+            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-full"
+          />
+          <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+            <div className="inline-flex items-center border border-gray-200 bg-indigo-100 rounded-full px-2 text-blue-500">
+              <SearchIcon className="h-4 w-4" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="max-w-3xl mx-auto overflow-hidden shadow rounded-lg mt-3 sm:mt-5">
         <ul className="divide-y divide-gray-200">
-          {expenses.map(
+          {filteredExpenses.map(
             ({id, merchant, date, usdPrice, btcPrice, memo}: TExpense) => (
               <li key={id}>
                 <Expense
